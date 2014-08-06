@@ -44,15 +44,18 @@ type Report struct {
 	Grouping  string
 	Frequency string
 	Date      string
+	Extension string
 }
 
 var PREFIX_FORMAT = regexp.MustCompile(`^RO*$`)
-var FREQUENCY_FORMAT = regexp.MustCompile(`^(daily|weekly|monthly|quarterly)$`)
+var FREQUENCY_FORMAT = regexp.MustCompile(`^(hourly|daily|weekly|monthly|quarterly)$`)
+var DATE_FORMAT_HOURLY = regexp.MustCompile(`^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([0-1][0-9]|2[0-3])$`)
 var DATE_FORMAT_DAILY = regexp.MustCompile(`^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$`)
 var DATE_FORMAT_MONTHLY = regexp.MustCompile(`^2[0-9]{3}-(0[1-9]|1[0-2])$`)
 var DATE_FORMAT_QUARTERLY = regexp.MustCompile(`^2[0-9]{3}-Q[1-4]$`)
+var EXTENSION_FORMAT = regexp.MustCompile(`^(csv|txt)$`)
 
-func NewReport(prefix string, content string, grouping string, frequency string, date string) (r *Report, err error) {
+func NewReport(prefix string, content string, grouping string, frequency string, date string, extension string) (r *Report, err error) {
 	if !PREFIX_FORMAT.MatchString(prefix) {
 		err = fmt.Errorf("Invalid prefix: '%s'", prefix)
 		return
@@ -60,6 +63,13 @@ func NewReport(prefix string, content string, grouping string, frequency string,
 	if !FREQUENCY_FORMAT.MatchString(frequency) {
 		err = fmt.Errorf("Invalid frequency: '%s'", frequency)
 		return
+	}
+	// hourly report formats a tailor made for dotHIV
+	if frequency == "hourly" {
+		if !DATE_FORMAT_HOURLY.MatchString(date) {
+			err = fmt.Errorf("Invalid date: '%s'", date)
+			return
+		}
 	}
 	if frequency == "daily" || frequency == "weekly" {
 		if !DATE_FORMAT_DAILY.MatchString(date) {
@@ -79,17 +89,22 @@ func NewReport(prefix string, content string, grouping string, frequency string,
 			return
 		}
 	}
+	if !EXTENSION_FORMAT.MatchString(extension) {
+		err = fmt.Errorf("Invalid extension: '%s'", extension)
+		return
+	}
 	r = new(Report)
 	r.Prefix = prefix
 	r.Content = content
 	r.Grouping = grouping
 	r.Frequency = frequency
 	r.Date = date
+	r.Extension = extension
 	return
 }
 
 func (r *Report) GetName() (name string) {
-	return fmt.Sprintf("%s_%s_%s_%s_%s.txt", r.Prefix, r.Content, r.Grouping, r.Frequency, r.Date)
+	return fmt.Sprintf("%s_%s_%s_%s_%s.%s", r.Prefix, r.Content, r.Grouping, r.Frequency, r.Date, r.Extension)
 }
 
 var NAME_FORMAT = regexp.MustCompile(`^` +
@@ -98,13 +113,16 @@ var NAME_FORMAT = regexp.MustCompile(`^` +
 	"(?P<grouping>[^_]+)_" +
 	"(?P<frequency>" + FREQUENCY_FORMAT.String()[1:len(FREQUENCY_FORMAT.String())-1] + ")_" +
 	"(?P<date>" +
+	"(" + DATE_FORMAT_HOURLY.String()[1:len(DATE_FORMAT_HOURLY.String())-1] + ")" +
+	"|" +
 	"(" + DATE_FORMAT_DAILY.String()[1:len(DATE_FORMAT_DAILY.String())-1] + ")" +
 	"|" +
 	"(" + DATE_FORMAT_MONTHLY.String()[1:len(DATE_FORMAT_MONTHLY.String())-1] + ")" +
 	"|" +
 	"(" + DATE_FORMAT_QUARTERLY.String()[1:len(DATE_FORMAT_QUARTERLY.String())-1] + ")" +
 	")" +
-	`.txt$`)
+	"\\.(?P<extension>" + EXTENSION_FORMAT.String()[1:len(EXTENSION_FORMAT.String())-1] + ")" +
+	`$`)
 
 // Create a report from a filename
 func NewReportFromName(name string) (r *Report, err error) {
@@ -119,5 +137,6 @@ func NewReportFromName(name string) (r *Report, err error) {
 	r.Grouping = matches["grouping"]
 	r.Frequency = matches["frequency"]
 	r.Date = matches["date"]
+	r.Extension = matches["extension"]
 	return
 }

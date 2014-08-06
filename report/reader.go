@@ -61,3 +61,8 @@ func (r *Reader) Next() (mappedLine map[string]string, err error) {
 	}
 	return
 }
+
+// Close open files
+func (r *Reader) Close() {
+	r.file.Close()
+}
