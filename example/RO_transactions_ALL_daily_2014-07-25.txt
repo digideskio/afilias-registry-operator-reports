@@ -1,0 +1,8 @@
+TLD|Registrar_Ext_ID|Registrar_Name|Server_TrID|Command|Object_Type|Object_Name|Transaction_Date
+hiv|1155-YN|Whois Networks Co., Ltd.|26515244|CREATE|DOMAIN|samsung.hiv|2014-07-25 08:04:03
+hiv|1180-LL|Lexsynergy Limited|26520558|UPDATE|DOMAIN|sbg.hiv|2014-07-25 14:42:36
+hiv|1180-LL|Lexsynergy Limited|26520560|UPDATE|DOMAIN|stanbic.hiv|2014-07-25 14:42:41
+hiv|1180-LL|Lexsynergy Limited|26520557|CREATE|DOMAIN|sbg.hiv|2014-07-25 14:42:36
+hiv|1180-LL|Lexsynergy Limited|26520555|CREATE|DOMAIN|standardbank.hiv|2014-07-25 14:42:29
+hiv|1180-LL|Lexsynergy Limited|26520556|UPDATE|DOMAIN|standardbank.hiv|2014-07-25 14:42:29
+hiv|1180-LL|Lexsynergy Limited|26520559|CREATE|DOMAIN|stanbic.hiv|2014-07-25 14:42:41
