@@ -3,46 +3,74 @@ package report
 import (
 	"encoding/csv"
 	model "github.com/dothiv/afilias-registry-operator-reports/afilias/model"
+	"io"
 	"os"
+	"strings"
 )
 
 // Can read Afilias Reports
+//
+// MinFields: Ignore lines with less that this number of fields
+// SkipErrors: Ignore lines which could not be parsed
 type Reader struct {
-	Report    *model.Report
-	file      *os.File
-	csvReader *csv.Reader
-	Header    []string
+	Report     *model.Report
+	file       *os.File
+	csvReader  *csv.Reader
+	Header     []string
+	MinFields  int
+	SkipErrors bool
 }
 
 // Create a new reader for report files
-func NewReportReader(dir string, report *model.Report) (reader *Reader, err error) {
+func NewReportReader() (reader *Reader) {
 	reader = new(Reader)
-	reader.file, err = os.Open(dir + report.GetName())
+	reader.MinFields = 2
+	reader.SkipErrors = false
+	return
+}
+
+// Close open files
+func (r *Reader) Close() {
+	r.file.Close()
+}
+
+// Open a report file
+func (r *Reader) Open(dir string, report *model.Report) (err error) {
+	r.file, err = os.Open(dir + report.GetName())
 	if err != nil {
 		return
 	}
-	reader.Report = report
-	reader.Header, err = reader.line()
+	r.Report = report
+
+	r.csvReader = csv.NewReader(r.file)
+	r.csvReader.Comma = '|'
+	if r.SkipErrors {
+		r.csvReader.FieldsPerRecord = -1
+	}
+	r.Header, err = r.line()
 	if err != nil {
 		return
 	}
 	return
 }
 
-// Returns (and inits) the csv reader for the file
-func (r *Reader) getCsvReader() *csv.Reader {
-	if r.csvReader == nil {
-		r.csvReader = csv.NewReader(r.file)
-		r.csvReader.Comma = '|'
-	}
-	return r.csvReader
-}
-
 // Read the next line from the report
 func (r *Reader) line() (line []string, err error) {
-	csvReader := r.getCsvReader()
-	line, err = csvReader.Read()
-	if err != nil {
+	for {
+		line, err = r.csvReader.Read()
+		if err == nil {
+			if len(line) < r.MinFields {
+				continue
+			}
+			return
+		}
+		if err == io.EOF {
+			return
+		}
+		if r.SkipErrors {
+			err = nil
+			continue
+		}
 		return
 	}
 	return
@@ -57,12 +85,7 @@ func (r *Reader) Next() (mappedLine map[string]string, err error) {
 	}
 	mappedLine = make(map[string]string)
 	for k := range r.Header {
-		mappedLine[r.Header[k]] = line[k]
+		mappedLine[strings.TrimSpace(r.Header[k])] = strings.TrimSpace(line[k])
 	}
 	return
-}
-
-// Close open files
-func (r *Reader) Close() {
-	r.file.Close()
 }

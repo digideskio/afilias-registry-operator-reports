@@ -7,11 +7,13 @@ import (
 	"testing"
 )
 
+// Test for a regular report
 func TestRead(t *testing.T) {
 	assert := assert.New(t)
 	report, reportErr := model.NewReport("RO", "transactions", "ALL", "daily", "2014-07-25", "txt")
 	assert.Nil(reportErr)
-	reader, readerErr := NewReportReader("../example/", report)
+	reader := NewReportReader()
+	readerErr := reader.Open("../example/", report)
 	assert.Nil(readerErr)
 	defer reader.Close()
 	lines := make([]map[string]string, 0)
@@ -56,11 +58,13 @@ func TestRead(t *testing.T) {
 	assert.Equal("2014-07-25 14:42:41", lines[6]["Transaction_Date"])
 }
 
+// Test for an hourly report
 func TestReadHourly(t *testing.T) {
 	assert := assert.New(t)
 	report, reportErr := model.NewReport("RO", "domain-contact-details", "hiv", "hourly", "2014-07-21T18", "csv")
 	assert.Nil(reportErr)
-	reader, readerErr := NewReportReader("../example/", report)
+	reader := NewReportReader()
+	readerErr := reader.Open("../example/", report)
 	assert.Nil(readerErr)
 	defer reader.Close()
 	lines := make([]map[string]string, 0)
@@ -101,4 +105,37 @@ func TestReadHourly(t *testing.T) {
 	assert.Equal("Acme Inc.", lines[1]["registrant_org"])
 	assert.Equal("ccops@acme.com", lines[1]["registrant_email"])
 	assert.Equal("", lines[1]["member_id"])
+}
+
+// Test for an deposit report
+func TestReadDeposit(t *testing.T) {
+	assert := assert.New(t)
+	report, reportErr := model.NewReport("RO", "deposit-withdrawal", "hiv", "monthly", "2014-08", "txt")
+	assert.Nil(reportErr)
+	reader := NewReportReader()
+	reader.SkipErrors = true
+	readerErr := reader.Open("../example/", report)
+	assert.Nil(readerErr)
+	defer reader.Close()
+	reader.SkipErrors = true
+	lines := make([]map[string]string, 0)
+	for {
+		line, err := reader.Next()
+		if err != nil {
+			assert.Equal(io.EOF, err)
+			break
+		}
+		lines = append(lines, line)
+	}
+	assert.Equal(43, len(lines))
+
+	// Check data
+	assert.Equal(6, len(lines[0]))
+	// Line 1
+	assert.Equal("Admin Contact", lines[0]["Done By"])
+	assert.Equal("1001-HV", lines[0]["Reg ID"])
+	assert.Equal("TLD dotHIV Registry GmbH", lines[0]["Registrar"])
+	assert.Equal("2014-07-15 22:27:49.05003", lines[0]["Transaction Date"])
+	assert.Equal("initial deposit", lines[0]["Type"])
+	assert.Equal("1000000.00", lines[0]["Amount"])
 }

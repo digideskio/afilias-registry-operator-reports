@@ -1,0 +1,48 @@
+portfolio_name:     hiv     
+tld_list:           hiv     
+
+Done By             |Reg ID  |Registrar                          |Transaction Date         |Type                                              |Amount      
+--------------------+--------+-----------------------------------+-------------------------+--------------------------------------------------+------------
+Admin Contact       |1001-HV |TLD dotHIV Registry GmbH           |2014-07-15 22:27:49.05003|initial deposit                                   |  1000000.00
+Admin Contact       |1002-HV |TLD dotHIV Registry GmbH           |2014-07-15 22:28:40.73234|initial deposit                                   |  1000000.00
+Registry Operator   |1010-RR |101domain, Inc.                    |2014-07-21 10:48:13.99297|initial deposit                                   |       10.00
+Registry Operator   |1010-RR |101domain, Inc.                    |2014-07-21 10:49:25.92350|initial deposit                                   |     9990.00
+Registry Operator   |1143-SI |Ascio Technologies, Inc. - Denmark |2014-07-21 10:51:25.46615|initial deposit                                   |    10000.00
+Registry Operator   |1025-BB |BB Online UK Ltd                   |2014-07-21 10:52:41.69207|initial deposit                                   |    10000.00
+Registry Operator   |1033-CO |Corehub, S.R.L.                    |2014-07-21 10:54:33.54606|initial deposit                                   |    10000.00
+Registry Operator   |1035-CD |CSC Corporate Domains, Inc.        |2014-07-21 10:56:51.37565|initial deposit                                   |    10000.00
+Registry Operator   |1373-ED |EuroDNS S.A.                       |2014-07-21 11:00:06.27416|initial deposit                                   |    10000.00
+Registry Operator   |1201-IM |IP Mirror Pte Ltd dba IP MIRROR    |2014-07-21 11:01:26.96771|initial deposit                                   |    10000.00
+Registry Operator   |1508-KS |Key-Systems, LLC                   |2014-07-21 11:02:55.12878|initial deposit                                   |    10000.00
+Registry Operator   |1180-LL |Lexsynergy Limited                 |2014-07-21 11:16:51.67315|initial deposit                                   |    10000.00
+Registry Operator   |1825-PM |Mailclub SAS                       |2014-07-21 11:20:43.60939|initial deposit                                   |    10000.00
+Registry Operator   |1941-MI |Marcaria.com International, Inc.   |2014-07-21 11:22:38.37702|initial deposit                                   |    10000.00
+Registry Operator   |1061-EM |MarkMonitor Inc.                   |2014-07-21 11:23:47.16624|initial deposit                                   |    10000.00
+Registry Operator   |1093-NM |Name.com LLC                       |2014-07-21 11:24:52.38297|initial deposit                                   |    10000.00
+Registry Operator   |1036-NI |Nom-iq Ltd. dba COM LAUDE          |2014-07-21 11:26:23.14879|initial deposit                                   |    10000.00
+Registry Operator   |1257-SF |SafeNames Ltd.                     |2014-07-21 11:27:52.37605|initial deposit                                   |    10000.00
+Registry Operator   |1293-DC |Super Registry Inc.                |2014-07-21 11:29:12.92250|initial deposit                                   |    10000.00
+Registry Operator   |1494-UD |Uniregistrar Corp                  |2014-07-21 11:40:17.94907|initial deposit                                   |    10000.00
+Registry Operator   |1155-YN |Whois Networks Co., Ltd.           |2014-07-21 11:41:30.95847|initial deposit                                   |    10000.00
+Registry Operator   |1204-UD |united-domains AG                  |2014-07-21 11:42:49.00879|initial deposit                                   |    10000.00
+Registry Operator   |1394-HC |Hosting Concepts B.V. d/b/a Openpro|2014-07-21 16:48:06.70031|initial deposit                                   |    10000.00
+Registry Operator   |1010-RR |101domain, Inc.                    |2014-07-21 19:45:35.33212|initial deposit void                              |   -10000.00
+Registry Operator   |1143-SI |Ascio Technologies, Inc. - Denmark |2014-07-21 19:50:07.12236|initial deposit void                              |   -10000.00
+Registry Operator   |1025-BB |BB Online UK Ltd                   |2014-07-21 19:51:32.68366|initial deposit void                              |   -10000.00
+Registry Operator   |1033-CO |Corehub, S.R.L.                    |2014-07-21 19:54:58.63832|initial deposit void                              |   -10000.00
+Registry Operator   |1035-CD |CSC Corporate Domains, Inc.        |2014-07-21 19:58:37.36666|initial deposit void                              |   -10000.00
+Registry Operator   |1373-ED |EuroDNS S.A.                       |2014-07-21 20:01:12.59594|initial deposit void                              |   -10000.00
+Registry Operator   |1394-HC |Hosting Concepts B.V. d/b/a Openpro|2014-07-21 20:04:27.41387|initial deposit void                              |   -10000.00
+Registry Operator   |1201-IM |IP Mirror Pte Ltd dba IP MIRROR    |2014-07-21 20:05:18.00924|initial deposit void                              |   -10000.00
+Registry Operator   |1508-KS |Key-Systems, LLC                   |2014-07-21 20:06:42.54865|initial deposit void                              |   -10000.00
+Registry Operator   |1180-LL |Lexsynergy Limited                 |2014-07-21 20:07:51.41157|initial deposit void                              |   -10000.00
+Registry Operator   |1825-PM |Mailclub SAS                       |2014-07-21 20:08:51.88107|initial deposit void                              |   -10000.00
+Registry Operator   |1941-MI |Marcaria.com International, Inc.   |2014-07-21 20:09:54.03284|initial deposit void                              |   -10000.00
+Registry Operator   |1061-EM |MarkMonitor Inc.                   |2014-07-21 20:11:59.80346|initial deposit void                              |   -10000.00
+Registry Operator   |1093-NM |Name.com LLC                       |2014-07-21 20:13:27.59854|initial deposit void                              |   -10000.00
+Registry Operator   |1036-NI |Nom-iq Ltd. dba COM LAUDE          |2014-07-21 20:14:27.77182|initial deposit void                              |   -10000.00
+Registry Operator   |1257-SF |SafeNames Ltd.                     |2014-07-21 20:15:40.37483|initial deposit void                              |   -10000.00
+Registry Operator   |1293-DC |Super Registry Inc.                |2014-07-21 20:17:03.30931|initial deposit void                              |   -10000.00
+Registry Operator   |1494-UD |Uniregistrar Corp                  |2014-07-21 20:19:06.12143|initial deposit void                              |   -10000.00
+Registry Operator   |1204-UD |united-domains AG                  |2014-07-21 20:20:40.08708|initial deposit void                              |   -10000.00
+Registry Operator   |1155-YN |Whois Networks Co., Ltd.           |2014-07-21 20:21:54.35872|initial deposit void                              |   -10000.00
