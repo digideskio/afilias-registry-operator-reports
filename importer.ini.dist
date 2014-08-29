@@ -1,0 +1,5 @@
+[database]
+host = localhost
+name =  dothiv_afilias
+user = dothiv_afilias
+; password = null
