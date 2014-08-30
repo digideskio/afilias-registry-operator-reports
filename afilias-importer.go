@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/dothiv/afilias-registry-operator-reports/cli"
 	"github.com/dothiv/afilias-registry-operator-reports/command/importer/registrations"
+	"github.com/dothiv/afilias-registry-operator-reports/command/server"
 	"github.com/wsxiaoys/terminal/color"
 	"os"
 )
@@ -21,7 +22,7 @@ func error(msg string) {
 
 func Help() {
 	cli.HelpBanner("@{g}<command>@{|}")
-	color.Fprintln(os.Stdout, fmt.Sprintf("  @{g}command@{|} may be         help | %s\n", registrations.NAME))
+	color.Fprintln(os.Stdout, fmt.Sprintf("  @{g}command@{|} may be         help | %s | %s\n", registrations.NAME, server.NAME))
 	color.Fprintln(os.Stdout, fmt.Sprintf("Use %s help <command> to get help for a command", os.Args[0]))
 }
 
@@ -43,6 +44,8 @@ func main() {
 			switch os.Args[2] {
 			case registrations.NAME:
 				registrations.Help()
+			case server.NAME:
+				server.Help()
 			}
 		}
 

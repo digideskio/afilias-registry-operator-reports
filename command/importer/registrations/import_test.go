@@ -1,6 +1,7 @@
 package registrations
 
 import (
+	"code.google.com/p/gcfg"
 	"database/sql"
 	"github.com/dothiv/afilias-registry-operator-reports/repository"
 	"github.com/stretchr/testify/assert"
@@ -14,14 +15,14 @@ func TestThatDataIsImported(t *testing.T) {
 	c := newDefaultConfig()
 	c.ConfigFile = "../../../test.ini"
 	c.ReportsDir = "../../../example"
-	configErr := c.ParseConfig()
+	configErr := gcfg.ReadFileInto(c, c.ConfigFile)
 	assert.Nil(configErr)
 
 	importErr := Import(c)
 	assert.Nil(importErr)
 
 	// Verify import
-	db, _ := sql.Open("postgres", c.DSN())
+	db, _ := sql.Open("postgres", c.Database.DSN())
 	repo := repository.NewDomainContactDetailsHourlyRepository(db)
 	events, findErr := repo.FindAll()
 	assert.Nil(findErr)

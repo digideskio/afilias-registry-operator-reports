@@ -20,7 +20,7 @@ func Import(c *Config) (err error) {
 	log(!c.Quiet, fmt.Sprintf("Importing into %s@%s/%s", c.Database.User, c.Database.Host, c.Database.Name))
 
 	// Open DB
-	db, err := sql.Open("postgres", c.DSN())
+	db, err := sql.Open("postgres", c.Database.DSN())
 	if err != nil {
 		return
 	}

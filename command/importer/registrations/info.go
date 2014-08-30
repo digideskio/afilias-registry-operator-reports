@@ -4,6 +4,7 @@ import (
 	"code.google.com/p/gcfg"
 	"fmt"
 	"github.com/dothiv/afilias-registry-operator-reports/cli"
+	"github.com/dothiv/afilias-registry-operator-reports/config"
 	"github.com/wsxiaoys/terminal/color"
 	"os"
 )
@@ -21,48 +22,20 @@ func Help() {
 	color.Fprintln(os.Stdout, fmt.Sprintf("                         default: @{c}%s@{|}", c.ConfigFile))
 }
 
-type DatabaseConfig struct {
-	Host     string
-	Name     string
-	User     string
-	Password string
-}
-
 type Config struct {
+	config.ConfigFromFile
 	Quiet      bool
 	ReportsDir string
-	ConfigFile string
 	Database   struct {
-		Host     string
-		Name     string
-		User     string
-		Password string
-		Sslmode  string
+		config.Database
 	}
-}
-
-// Parse config file
-func (c *Config) ParseConfig() (err error) {
-	err = gcfg.ReadFileInto(c, c.ConfigFile)
-	return
-}
-
-func (c *Config) DSN() (dsn string) {
-	dsn = fmt.Sprintf("user=%s dbname=%s sslmode=%s", c.Database.User, c.Database.Name, c.Database.Sslmode)
-	if len(c.Database.Host) > 0 {
-		dsn = dsn + "  host=" + c.Database.Host
-	}
-	if len(c.Database.Password) > 0 {
-		dsn = dsn + "  password=" + c.Database.Password
-	}
-	return
 }
 
 func newDefaultConfig() (c *Config) {
 	c = new(Config)
 	c.Quiet = false
 	c.ConfigFile = "./importer.ini"
-	c.Database.Sslmode = "disable"
+	c.Database.Defaults()
 	return
 }
 
@@ -87,7 +60,7 @@ func NewConfig() (c *Config, err error) {
 		}
 	}
 
-	err = c.ParseConfig()
+	err = gcfg.ReadFileInto(c, c.ConfigFile)
 	if err != nil {
 		return
 	}
