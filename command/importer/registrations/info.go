@@ -80,8 +80,9 @@ func NewConfig() (c *Config, err error) {
 	for i := range os.Args {
 		if os.Args[i] == "-q" {
 			c.Quiet = true
+			continue
 		}
-		if os.Args[i][0:3] == "-c=" {
+		if len(os.Args[i]) > 3 && os.Args[i][0:3] == "-c=" {
 			c.ConfigFile = os.Args[i][3:]
 		}
 	}
