@@ -40,6 +40,12 @@ type Config struct {
 	}
 }
 
+// Parse config file
+func (c *Config) ParseConfig() (err error) {
+	err = gcfg.ReadFileInto(c, c.ConfigFile)
+	return
+}
+
 func newDefaultConfig() (c *Config) {
 	c = new(Config)
 	c.Quiet = false
@@ -67,8 +73,7 @@ func NewConfig() (c *Config, err error) {
 		}
 	}
 
-	// Check config file
-	err = gcfg.ReadFileInto(c, c.ConfigFile)
+	err = c.ParseConfig()
 	if err != nil {
 		return
 	}
