@@ -15,7 +15,7 @@ install:
   - go get code.google.com/p/gcfg
 
 before_script:
-  - cp config.ini.travis test.ini
+  - cp importer.ini.travis test.ini
   - psql -U postgres < sql/domain_contact_details_hourly.sql
 
 script:
