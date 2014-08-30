@@ -2,7 +2,6 @@ package registrations
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/dothiv/afilias-registry-operator-reports/repository"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -22,7 +21,7 @@ func TestThatDataIsImported(t *testing.T) {
 	assert.Nil(importErr)
 
 	// Verify import
-	db, _ := sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s sslmode=disable host=%s", c.Database.User, c.Database.Name, c.Database.Host))
+	db, _ := sql.Open("postgres", c.DSN())
 	repo := repository.NewDomainContactDetailsHourlyRepository(db)
 	events, findErr := repo.FindAll()
 	assert.Nil(findErr)

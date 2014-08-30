@@ -37,6 +37,7 @@ type Config struct {
 		Name     string
 		User     string
 		Password string
+		Sslmode  string
 	}
 }
 
@@ -46,10 +47,22 @@ func (c *Config) ParseConfig() (err error) {
 	return
 }
 
+func (c *Config) DSN() (dsn string) {
+	dsn = fmt.Sprintf("user=%s dbname=%s sslmode=%s", c.Database.User, c.Database.Name, c.Database.Sslmode)
+	if len(c.Database.Host) > 0 {
+		dsn = dsn + "  host=" + c.Database.Host
+	}
+	if len(c.Database.Password) > 0 {
+		dsn = dsn + "  password=" + c.Database.Password
+	}
+	return
+}
+
 func newDefaultConfig() (c *Config) {
 	c = new(Config)
 	c.Quiet = false
 	c.ConfigFile = "./importer.ini"
+	c.Database.Sslmode = "disable"
 	return
 }
 
@@ -69,7 +82,7 @@ func NewConfig() (c *Config, err error) {
 			c.Quiet = true
 		}
 		if os.Args[i][0:3] == "-c=" {
-			c.ConfigFile = os.Args[i][4:]
+			c.ConfigFile = os.Args[i][3:]
 		}
 	}
 

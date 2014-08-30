@@ -20,7 +20,7 @@ func Import(c *Config) (err error) {
 	log(!c.Quiet, fmt.Sprintf("Importing into %s@%s/%s", c.Database.User, c.Database.Host, c.Database.Name))
 
 	// Open DB
-	db, err := sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s sslmode=disable host=%s", c.Database.User, c.Database.Name, c.Database.Host))
+	db, err := sql.Open("postgres", c.DSN())
 	if err != nil {
 		return
 	}
@@ -31,6 +31,8 @@ func Import(c *Config) (err error) {
 	if err == sql.ErrNoRows {
 		err = nil
 		log(!c.Quiet, "Initial import")
+	} else if err != nil {
+		return
 	} else {
 		log(!c.Quiet, "Importing events after "+latestImportTime)
 		latestImport, err = time.Parse("2006-01-02 15:04:05.999999999-07", latestImportTime)
