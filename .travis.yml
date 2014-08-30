@@ -16,7 +16,8 @@ install:
 
 before_script:
   - cp importer.ini.travis test.ini
-  - psql -U postgres < sql/domain_contact_details_hourly.sql
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - psql -U postgres -d travis_ci_test < sql/domain_contact_details_hourly.sql
 
 script:
   - go test ./...
