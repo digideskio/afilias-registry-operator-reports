@@ -7,25 +7,22 @@ import (
 )
 
 const TABLE_NAME = "domain_contact_details_hourly"
+const FIELDS = "domain_id, domain_name, domain_created_on, registrar_ext_id, registrant_client_id, registrant_name, registrant_org, registrant_email"
 
-type DomainContactDetailsHourlyRepository struct {
-	Repository
-}
-
-func NewDomainContactDetailsHourlyRepository(db *sql.DB) (repo *DomainContactDetailsHourlyRepository) {
-	repo = new(DomainContactDetailsHourlyRepository)
+func NewDomainContactDetailsHourlyRepository(db *sql.DB) (repo *Repository) {
+	repo = new(Repository)
 	repo.db = db
 	return
 }
 
-func (repo *DomainContactDetailsHourlyRepository) GetLatestImportTime() (domain_created_on string, err error) {
+func (repo *Repository) GetLatestImportTime() (domain_created_on string, err error) {
 	err = repo.db.QueryRow("SELECT domain_created_on FROM " + TABLE_NAME + " ORDER BY domain_created_on DESC LIMIT 1").Scan(&domain_created_on)
 	return
 }
 
-func (repo *DomainContactDetailsHourlyRepository) Persist(m *model.DomainContactDetailsHourly) (result sql.Result, err error) {
+func (repo *Repository) Persist(m *model.DomainContactDetailsHourly) (result sql.Result, err error) {
 	result, err = repo.db.Exec("INSERT INTO "+TABLE_NAME+" "+
-		"(domain_id, domain_name, domain_created_on, registrar_ext_id, registrant_client_id, registrant_name, registrant_org, registrant_email) "+
+		"("+FIELDS+") "+
 		"VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
 		m.DomainId,
 		m.DomainName,
@@ -38,12 +35,7 @@ func (repo *DomainContactDetailsHourlyRepository) Persist(m *model.DomainContact
 	return
 }
 
-func (repo *DomainContactDetailsHourlyRepository) FindAll() (result []*model.DomainContactDetailsHourly, err error) {
-	rows, err := repo.db.Query("SELECT domain_id, domain_name, domain_created_on, registrar_ext_id, registrant_client_id, registrant_name, registrant_org, registrant_email FROM " + TABLE_NAME + " ORDER BY domain_created_on ASC")
-	if err != nil {
-		return
-	}
-	defer rows.Close()
+func rowsToResult(rows *sql.Rows) (result []*model.DomainContactDetailsHourly, err error) {
 	result = make([]*model.DomainContactDetailsHourly, 0)
 	for rows.Next() {
 		var m = new(model.DomainContactDetailsHourly)
@@ -61,8 +53,35 @@ func (repo *DomainContactDetailsHourlyRepository) FindAll() (result []*model.Dom
 		result = append(result, m)
 	}
 	err = rows.Err()
+	return
+}
+
+func (repo *Repository) FindAll() (result []*model.DomainContactDetailsHourly, err error) {
+	rows, err := repo.db.Query("SELECT " + FIELDS + " FROM " + TABLE_NAME + " ORDER BY domain_created_on ASC")
 	if err != nil {
 		return
 	}
+	defer rows.Close()
+	result, err = rowsToResult(rows)
+	return
+}
+
+func (repo *Repository) Count() (count int, err error) {
+	err = repo.db.QueryRow("SELECT COUNT(domain_name) FROM " + TABLE_NAME).Scan(&count)
+	return
+}
+
+func (repo *Repository) FindPaginated(numitems int, offsetKey string) (result []*model.DomainContactDetailsHourly, err error) {
+	var rows *sql.Rows
+	if len(offsetKey) > 0 {
+		rows, err = repo.db.Query("SELECT "+FIELDS+" "+"FROM "+TABLE_NAME+" WHERE domain_id > $1 ORDER BY domain_created_on ASC LIMIT $2", offsetKey, numitems)
+	} else {
+		rows, err = repo.db.Query("SELECT "+FIELDS+" "+"FROM "+TABLE_NAME+" ORDER BY domain_created_on ASC LIMIT $1", numitems)
+	}
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+	result, err = rowsToResult(rows)
 	return
 }

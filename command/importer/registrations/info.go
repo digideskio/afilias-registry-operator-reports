@@ -12,7 +12,7 @@ import (
 const NAME = "import-registrations"
 
 func Help() {
-	c := newDefaultConfig()
+	c := NewDefaultConfig()
 	cli.HelpBanner(NAME + " @{g}<reportsdir>@{|} @{c}[flags]@{|}")
 	os.Stdout.WriteString("Import new registrations into the local database.\n")
 	os.Stdout.WriteString("\n")
@@ -31,7 +31,7 @@ type Config struct {
 	}
 }
 
-func newDefaultConfig() (c *Config) {
+func NewDefaultConfig() (c *Config) {
 	c = new(Config)
 	c.Quiet = false
 	c.ConfigFile = "./importer.ini"
@@ -40,7 +40,7 @@ func newDefaultConfig() (c *Config) {
 }
 
 func NewConfig() (c *Config, err error) {
-	c = newDefaultConfig()
+	c = NewDefaultConfig()
 
 	// Parse args
 	if len(os.Args) < 3 {

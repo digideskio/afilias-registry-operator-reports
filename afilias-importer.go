@@ -63,5 +63,18 @@ func main() {
 			os.Exit(1)
 		}
 		os.Exit(0)
+	case server.NAME:
+		c, err := server.NewConfig()
+		if err != nil {
+			error(err.Error())
+			server.Help()
+			os.Exit(1)
+		}
+		err = server.Run(c)
+		if err != nil {
+			error(err.Error())
+			os.Exit(1)
+		}
+		os.Exit(0)
 	}
 }

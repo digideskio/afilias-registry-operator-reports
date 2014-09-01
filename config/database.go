@@ -18,7 +18,6 @@ func (d *Database) DSN() (dsn string) {
 	if len(d.Password) > 0 {
 		dsn = dsn + " password=" + d.Password
 	}
-	print(dsn)
 	return
 }
 

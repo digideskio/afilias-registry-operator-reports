@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var repo *repository.DomainContactDetailsHourlyRepository
+var repo *repository.Repository
 var latestImport time.Time
 
 func Import(c *Config) (err error) {

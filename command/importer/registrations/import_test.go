@@ -12,7 +12,7 @@ import (
 func TestThatDataIsImported(t *testing.T) {
 	assert := assert.New(t)
 
-	c := newDefaultConfig()
+	c := NewDefaultConfig()
 	c.ConfigFile = "../../../test.ini"
 	c.ReportsDir = "../../../example"
 	configErr := gcfg.ReadFileInto(c, c.ConfigFile)
