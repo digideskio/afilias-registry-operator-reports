@@ -66,8 +66,8 @@ func (repo *Repository) FindAll() (result []*model.DomainContactDetailsHourly, e
 	return
 }
 
-func (repo *Repository) Count() (count int, err error) {
-	err = repo.db.QueryRow("SELECT COUNT(domain_name) FROM " + TABLE_NAME).Scan(&count)
+func (repo *Repository) Stats() (count int, maxKey string, err error) {
+	err = repo.db.QueryRow("SELECT COUNT(domain_name), MAX(domain_id) FROM "+TABLE_NAME).Scan(&count, &maxKey)
 	return
 }
 

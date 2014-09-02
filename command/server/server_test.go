@@ -87,4 +87,45 @@ func TestThatItListsRegistrations(t *testing.T) {
 	assert.Equal("Domain Administrator", l.Items[1].RegistrantName)
 	assert.Equal("Acme Inc.", l.Items[1].RegistrantOrg)
 	assert.Equal("ccops@acme.com", l.Items[1].RegistrantEmail)
+
+	assert.Equal(`</registrations?offsetKey=2863499>; rel="next"`, res.Header.Get("Link"))
+}
+
+func TestThatItReturnsNextUrlAfterEnd(t *testing.T) {
+	assert := assert.New(t)
+
+	// Import
+	c := registrations.NewDefaultConfig()
+	c.ConfigFile = "../../test.ini"
+	c.ReportsDir = "../../example"
+	c.Quiet = true
+	configErr := gcfg.ReadFileInto(c, c.ConfigFile)
+	if configErr != nil {
+		t.Fatal(configErr)
+	}
+
+	importErr := registrations.Import(c)
+	if importErr != nil {
+		t.Fatal(importErr)
+	}
+
+	cntrl := new(Controller)
+	db, _ := sql.Open("postgres", c.Database.DSN())
+	cntrl.repo = repository.NewDomainContactDetailsHourlyRepository(db)
+
+	ts := httptest.NewServer(http.HandlerFunc(cntrl.registrationsHandler))
+	defer ts.Close()
+
+	res, err := http.Get(ts.URL + "/registrations?offsetKey=2863499")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(`</registrations?offsetKey=2863499>; rel="next"`, res.Header.Get("Link"))
+
 }

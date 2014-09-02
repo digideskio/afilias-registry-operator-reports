@@ -79,10 +79,10 @@ func (c *Controller) registrationsHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	total, countErr := c.repo.Count()
-	if countErr != nil {
+	total, maxKey, statsErr := c.repo.Stats()
+	if statsErr != nil {
 		w.WriteHeader(500)
-		os.Stderr.WriteString(countErr.Error() + "\n")
+		os.Stderr.WriteString(statsErr.Error() + "\n")
 		return
 	}
 
@@ -112,6 +112,8 @@ func (c *Controller) registrationsHandler(w http.ResponseWriter, r *http.Request
 	if len(events) > 0 {
 		last := list.Items[len(events)-1]
 		w.Header().Add("Link", `</registrations?offsetKey=`+last.DomainId+`>; rel="next"`)
+	} else {
+		w.Header().Add("Link", `</registrations?offsetKey=`+maxKey+`>; rel="next"`)
 	}
 	encoder := json.NewEncoder(w)
 	encoder.Encode(list)
