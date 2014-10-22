@@ -6,3 +6,5 @@ hiv|1180-LL|Lexsynergy Limited|26520557|CREATE|DOMAIN|sbg.hiv|2014-07-25 14:42:3
 hiv|1180-LL|Lexsynergy Limited|26520555|CREATE|DOMAIN|standardbank.hiv|2014-07-25 14:42:29
 hiv|1180-LL|Lexsynergy Limited|26520556|UPDATE|DOMAIN|standardbank.hiv|2014-07-25 14:42:29
 hiv|1180-LL|Lexsynergy Limited|26520559|CREATE|DOMAIN|stanbic.hiv|2014-07-25 14:42:41
+hiv|1508-KS|Key-Systems, LLC|27568803|DELETE|DOMAIN|red2.hiv|2014-10-01 07:13:23
+hiv|1508-KS|Key-Systems, LLC|27512639|TRANSFER|DOMAIN|update-your-life.hiv|2014-09-25 11:50:10

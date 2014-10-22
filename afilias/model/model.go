@@ -1,4 +1,4 @@
 package model
 
-type Model struct {
+type Model interface {
 }

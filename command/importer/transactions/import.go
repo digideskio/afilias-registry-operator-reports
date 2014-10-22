@@ -1,4 +1,4 @@
-package registrations
+package transactions
 
 import (
 	"database/sql"
@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var repo repository.DomainContactDetailsHouryRepositoryInterface
+var repo repository.TransactionRepositoryInterface
 var latestImport time.Time
 
 func Import(c *Config) (err error) {
@@ -26,7 +26,7 @@ func Import(c *Config) (err error) {
 	}
 
 	// How much can we skip?
-	repo = repository.NewDomainContactDetailsHourlyRepository(db)
+	repo = repository.NewTransactionRepository(db)
 	latestImportTime, err := repo.GetLatestImportTime()
 	if err == sql.ErrNoRows {
 		err = nil
@@ -35,7 +35,7 @@ func Import(c *Config) (err error) {
 		return
 	} else {
 		log(!c.Quiet, "Importing events after "+latestImportTime)
-		latestImport, err = time.Parse("2006-01-02 15:04:05.999999999-07", latestImportTime)
+		latestImport, err = time.Parse("2006-01-02 15:04:05", latestImportTime)
 		if err != nil {
 			return
 		}
@@ -61,13 +61,13 @@ func importFile(path string, f os.FileInfo, e error) (err error) {
 	if err != nil {
 		return nil
 	}
-	if r.Content != "domain-contact-details" || r.Grouping != "hiv" || r.Frequency != "hourly" {
+	if r.Content != "transactions" || r.Grouping != "ALL" || r.Frequency != "daily" {
 		return nil
 	}
 
 	if &latestImport != nil {
 		var reportTime time.Time
-		reportTime, err = time.Parse("2006-01-02T15", r.Date)
+		reportTime, err = time.Parse("2006-01-02", r.Date)
 		if err != nil {
 			return
 		}
@@ -87,24 +87,24 @@ func importFile(path string, f os.FileInfo, e error) (err error) {
 		if readErr != nil {
 			break
 		}
-		var domain_created_on time.Time
-		domain_created_on, err = time.Parse("2006-01-02 15:04:05.999999999-07", line["domain_created_on"])
+		var transaction_date time.Time
+		transaction_date, err = time.Parse("2006-01-02 15:04:05", line["Transaction_Date"])
 		if err != nil {
 			return
 		}
-		if latestImport.After(domain_created_on) || latestImport.Equal(domain_created_on) {
+		if latestImport.After(transaction_date) || latestImport.Equal(transaction_date) {
 			continue
 		}
-		dcdh := new(model.DomainContactDetailsHourly)
-		dcdh.DomainId = line["domain_id"]
-		dcdh.DomainName = line["domain_name"]
-		dcdh.DomainCreatedOn = line["domain_created_on"]
-		dcdh.RegistrarExtId = line["registrar_ext_id"]
-		dcdh.RegistrantClientId = line["registrant_client_id"]
-		dcdh.RegistrantName = line["registrant_name"]
-		dcdh.RegistrantOrg = line["registrant_org"]
-		dcdh.RegistrantEmail = line["registrant_email"]
-		_, err = repo.Persist(dcdh)
+		transaction := new(model.Transaction)
+		transaction.TLD = line["TLD"]
+		transaction.Registrar_Ext_ID = line["Registrar_Ext_ID"]
+		transaction.Registrar_Name = line["Registrar_Name"]
+		transaction.Server_TrID = line["Server_TrID"]
+		transaction.Command = line["Command"]
+		transaction.Object_Type = line["Object_Type"]
+		transaction.Object_Name = line["Object_Name"]
+		transaction.Transaction_Date = line["Transaction_Date"]
+		_, err = repo.Persist(transaction)
 		if err != nil {
 			return
 		}

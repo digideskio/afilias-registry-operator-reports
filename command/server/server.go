@@ -39,7 +39,7 @@ type RegistrationEvent struct {
 }
 
 type Controller struct {
-	repo *repository.Repository
+	repo repository.DomainContactDetailsHouryRepositoryInterface
 }
 
 func (c *Controller) entryPointHandler(w http.ResponseWriter, r *http.Request) {

@@ -25,7 +25,7 @@ func TestRead(t *testing.T) {
 		}
 		lines = append(lines, line)
 	}
-	assert.Equal(7, len(lines))
+	assert.Equal(9, len(lines))
 	// Check header
 	assert.Equal(8, len(reader.Header))
 	assert.Equal("TLD", reader.Header[0])
