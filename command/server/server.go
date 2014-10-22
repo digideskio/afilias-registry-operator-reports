@@ -18,6 +18,7 @@ type JsonLDTyped struct {
 type EntryPoint struct {
 	JsonLDContext string       `json:"@context"`
 	Registrations *JsonLDTyped `json:"registrations"`
+	Transactions  *JsonLDTyped `json:"transactions"`
 }
 
 type EntryPointController struct {
@@ -34,6 +35,10 @@ func (c *EntryPointController) entryPointHandler(w http.ResponseWriter, r *http.
 	entryPoint.Registrations.JsonLDContext = "http://jsonld.click4life.hiv/List"
 	entryPoint.Registrations.JsonLDType = "http://jsonld.click4life.hiv/Afilias/RegistrationEvent"
 	entryPoint.Registrations.JsonLDId = "/registrations"
+	entryPoint.Transactions = new(JsonLDTyped)
+	entryPoint.Transactions.JsonLDContext = "http://jsonld.click4life.hiv/List"
+	entryPoint.Transactions.JsonLDType = "http://jsonld.click4life.hiv/Afilias/TransactionEvent"
+	entryPoint.Transactions.JsonLDId = "/transactions"
 	w.Header().Add("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
 	encoder.Encode(entryPoint)

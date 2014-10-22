@@ -10,7 +10,8 @@ package main
 import (
 	"fmt"
 	"github.com/dothiv/afilias-registry-operator-reports/cli"
-	"github.com/dothiv/afilias-registry-operator-reports/command/importer/registrations"
+	registrations "github.com/dothiv/afilias-registry-operator-reports/command/importer/registrations"
+	transactions "github.com/dothiv/afilias-registry-operator-reports/command/importer/transactions"
 	"github.com/dothiv/afilias-registry-operator-reports/command/server"
 	"github.com/wsxiaoys/terminal/color"
 	"os"
@@ -22,7 +23,7 @@ func error(msg string) {
 
 func Help() {
 	cli.HelpBanner("@{g}<command>@{|}")
-	color.Fprintln(os.Stdout, fmt.Sprintf("  @{g}command@{|} may be         help | %s | %s\n", registrations.NAME, server.NAME))
+	color.Fprintln(os.Stdout, fmt.Sprintf("  @{g}command@{|} may be         help | %s | %s | %s\n", registrations.NAME, transactions.NAME, server.NAME))
 	color.Fprintln(os.Stdout, fmt.Sprintf("Use %s help <command> to get help for a command", os.Args[0]))
 }
 
@@ -58,6 +59,19 @@ func main() {
 			os.Exit(1)
 		}
 		err = registrations.Import(c)
+		if err != nil {
+			error(err.Error())
+			os.Exit(1)
+		}
+		os.Exit(0)
+	case transactions.NAME:
+		c, err := transactions.NewConfig()
+		if err != nil {
+			error(err.Error())
+			transactions.Help()
+			os.Exit(1)
+		}
+		err = transactions.Import(c)
 		if err != nil {
 			error(err.Error())
 			os.Exit(1)
