@@ -30,7 +30,7 @@ func NewTransactionRepository(db *sql.DB) (repo *TransactionRepository) {
 }
 
 func (repo *TransactionRepository) GetLatestImportTime() (transaction_date string, err error) {
-	err = repo.db.QueryRow("SELECT transaction_date FROM " + repo.TABLE_NAME + " ORDER BY transaction_date DESC LIMIT 1").Scan(&transaction_date)
+	err = repo.db.QueryRow("SELECT transaction_date FROM " + repo.TABLE_NAME + " ORDER BY server_transaction_id DESC LIMIT 1").Scan(&transaction_date)
 	return
 }
 
@@ -72,7 +72,7 @@ func (repo *TransactionRepository) rowsToResult(rows *sql.Rows) (result []*model
 }
 
 func (repo *TransactionRepository) FindAll() (result []*model.Transaction, err error) {
-	rows, err := repo.db.Query("SELECT " + repo.FIELDS + " FROM " + repo.TABLE_NAME + " ORDER BY transaction_date ASC")
+	rows, err := repo.db.Query("SELECT " + repo.FIELDS + " FROM " + repo.TABLE_NAME + " ORDER BY server_transaction_id ASC")
 	if err != nil {
 		return
 	}
@@ -89,9 +89,9 @@ func (repo *TransactionRepository) Stats() (count int, maxKey string, err error)
 func (repo *TransactionRepository) FindPaginated(numitems int, offsetKey string) (result []*model.Transaction, err error) {
 	var rows *sql.Rows
 	if len(offsetKey) > 0 {
-		rows, err = repo.db.Query("SELECT "+repo.FIELDS+" "+"FROM "+repo.TABLE_NAME+" WHERE server_transaction_id > $1 ORDER BY transaction_date ASC LIMIT $2", offsetKey, numitems)
+		rows, err = repo.db.Query("SELECT "+repo.FIELDS+" "+"FROM "+repo.TABLE_NAME+" WHERE server_transaction_id > $1 ORDER BY server_transaction_id ASC LIMIT $2", offsetKey, numitems)
 	} else {
-		rows, err = repo.db.Query("SELECT "+repo.FIELDS+" "+"FROM "+repo.TABLE_NAME+" ORDER BY transaction_date ASC LIMIT $1", numitems)
+		rows, err = repo.db.Query("SELECT "+repo.FIELDS+" "+"FROM "+repo.TABLE_NAME+" ORDER BY server_transaction_id ASC LIMIT $1", numitems)
 	}
 	if err != nil {
 		return
