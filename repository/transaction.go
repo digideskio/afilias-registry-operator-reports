@@ -30,7 +30,13 @@ func NewTransactionRepository(db *sql.DB) (repo *TransactionRepository) {
 }
 
 func (repo *TransactionRepository) GetLatestImportTime() (transaction_date string, err error) {
-	err = repo.db.QueryRow("SELECT transaction_date FROM " + repo.TABLE_NAME + " ORDER BY server_transaction_id DESC LIMIT 1").Scan(&transaction_date)
+	// server_transaction_id is not always greater for the latest transaction
+	// example:
+	//  tld | registrar_ext_id |  registrar_name  | server_transaction_id | command | object_type |   object_name   |  transaction_date   |          created
+	// -----+------------------+------------------+-----------------------+---------+-------------+-----------------+---------------------+----------------------------
+	//  hiv | 1137-SP          | 1&1 Internet AG  |              29236987 | UPDATE  | DOMAIN      | brudler.hiv     | 2015-02-03 10:40:16 | 2015-02-04 15:23:44.644834
+	//  hiv | 1508-KS          | Key-Systems, LLC |              29240543 | CREATE  | DOMAIN      | henrik4life.hiv | 2015-02-02 16:08:34 | 2015-02-03 12:05:10.891256
+	err = repo.db.QueryRow("SELECT transaction_date FROM " + repo.TABLE_NAME + " ORDER BY transaction_date DESC LIMIT 1").Scan(&transaction_date)
 	return
 }
 

@@ -9,7 +9,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/dothiv/afilias-registry-operator-reports/cli"
 	registrations "github.com/dothiv/afilias-registry-operator-reports/command/importer/registrations"
 	transactions "github.com/dothiv/afilias-registry-operator-reports/command/importer/transactions"
 	"github.com/dothiv/afilias-registry-operator-reports/command/server"
@@ -22,7 +21,7 @@ func error(msg string) {
 }
 
 func Help() {
-	cli.HelpBanner("@{g}<command>@{|}")
+	color.Fprintln(os.Stdout, fmt.Sprintf("Usage: %s %s\n", os.Args[0], "@{g}<command>@{|}"))
 	color.Fprintln(os.Stdout, fmt.Sprintf("  @{g}command@{|} may be         help | %s | %s | %s\n", registrations.NAME, transactions.NAME, server.NAME))
 	color.Fprintln(os.Stdout, fmt.Sprintf("Use %s help <command> to get help for a command", os.Args[0]))
 }
